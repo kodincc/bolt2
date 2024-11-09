@@ -77,6 +77,7 @@ interface BaseChatProps {
   messages?: Message[];
   enhancingPrompt?: boolean;
   promptEnhanced?: boolean;
+  fromCache?: boolean;
   input?: string;
   model: string;
   setModel: (model: string) => void;
@@ -99,6 +100,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       isStreaming = false,
       enhancingPrompt = false,
       promptEnhanced = false,
+      fromCache = false,
       messages,
       input = '',
       model,
@@ -270,8 +272,15 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                           </>
                         ) : (
                           <>
-                            <div className="i-bolt:stars text-xl"></div>
-                            {promptEnhanced && <div className="ml-1.5">Prompt enhanced</div>}
+                            <div className={classNames("text-xl", {
+                              "i-bolt:stars": !fromCache,
+                              "i-heroicons:clock": fromCache && promptEnhanced
+                            })}></div>
+                            {promptEnhanced && (
+                              <div className="ml-1.5">
+                                {fromCache ? "From cache" : "Prompt enhanced"}
+                              </div>
+                            )}
                           </>
                         )}
                       </IconButton>
