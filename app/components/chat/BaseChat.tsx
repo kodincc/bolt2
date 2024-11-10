@@ -27,9 +27,11 @@ const EXAMPLE_PROMPTS = [
 const providerList = [...new Set(MODEL_LIST.map((model) => model.provider))]
 
 const ModelSelector = ({ model, setModel, provider, setProvider, modelList, providerList }) => {
+  const currentModelList = [...modelList].filter(e => e.provider == provider && e.name);
+  console.log(modelList, currentModelList);
   return (
     <div className="mb-2 flex gap-2">
-      <select 
+      <select
         value={provider}
         onChange={(e) => {
           setProvider(e.target.value);
@@ -51,12 +53,13 @@ const ModelSelector = ({ model, setModel, provider, setProvider, modelList, prov
         </option>
       </select>
       <select
+        key={provider}
         value={model}
         onChange={(e) => setModel(e.target.value)}
         className="flex-1 p-2 rounded-lg border border-bolt-elements-borderColor bg-bolt-elements-prompt-background text-bolt-elements-textPrimary focus:outline-none focus:ring-2 focus:ring-bolt-elements-focus transition-all"
       >
-        {[...modelList].filter(e => e.provider == provider && e.name).map((modelOption) => (
-          <option key={modelOption.name} value={modelOption.name}>
+        {currentModelList.map((modelOption) => (
+          <option key={modelOption.provider + ':' + modelOption.name} value={modelOption.name}>
             {modelOption.label}
           </option>
         ))}
